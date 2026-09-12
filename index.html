@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PresuFácil - Finanzas Familiares</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen pb-12 antialiased">
+    <header class="bg-white border-b border-slate-100 py-4 px-4 sticky top-0 z-10 shadow-sm">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-wallet text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">PresuFácil</h1>
+                    <p class="text-xs text-slate-500">Control de Presupuesto Familiar</p>
+                </div>
+            </div>
+            <button id="btn-reset-app" class="flex items-center gap-1 px-2 py-1 text-xs font-semibold text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100">
+                <i class="fa-solid fa-rotate"></i>
+                <span>Reiniciar</span>
+            </button>
+        </div>
+    </header>
 
+    <main class="max-w-md mx-auto px-4 mt-6 space-y-6">
+        <!-- 1. PANEL PRINCIPAL: DINERO REAL DISPONIBLE -->
+        <section>
+            <div id="card-balance" class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-3xl p-6 shadow-xl shadow-emerald-100/50 transition-all duration-500 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10">
+                    <span class="text-xs font-semibold tracking-wider text-emerald-100 uppercase">Dinero Real Disponible</span>
+                    <div class="flex items-baseline mt-1 gap-1">
+                        <span id="txt-balance" class="text-4xl font-extrabold tracking-tight">0,00</span>
+                        <span class="text-2xl font-bold">€</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 mt-6 pt-4 border-t border-white/20 text-center text-xs">
+                        <div>
+                            <span class="block text-[10px] uppercase font-medium text-emerald-100">Ingreso (+)</span>
+                            <span id="txt-resumen-nomina" class="font-bold block mt-0.5">0,00 €</span>
+                        </div>
+                        <div class="border-x border-white/15">
+                            <span class="block text-[10px] uppercase font-medium text-emerald-100">Fijos (-)</span>
+                            <span id="txt-resumen-fijos" class="font-bold block mt-0.5">0,00 €</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] uppercase font-medium text-emerald-100">Tarjetas (-)</span>
+                            <span id="txt-resumen-tarjetas" class="font-bold block mt-0.5">0,00 €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. INGRESO NÓMINA (DÍA 25) -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+                    <i class="fa-solid fa-briefcase text-sm"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-slate-800 text-sm">Nómina del Día 25</h2>
+                    <p class="text-xs text-slate-400">Tu principal ingreso mensual</p>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <span class="text-slate-400 font-semibold text-lg">€</span>
+                </div>
+                <input type="number" id="input-nomina" placeholder="0.00" step="0.01" min="0" class="block w-full pl-8 pr-12 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 font-bold text-lg text-slate-800 placeholder-slate-300">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <span class="text-[10px] font-bold text-slate-400 bg-slate-200/50 px-1.5 py-0.5 rounded">EUR</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. SECCIÓN: GASTOS FIJOS DOMICILIADOS -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                        <i class="fa-solid fa-house-laptop text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-800 text-sm">Gastos Fijos</h2>
+                        <p class="text-xs text-slate-400">Recibos domiciliados</p>
+                    </div>
+                </div>
+                <button id="btn-add-gasto" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-all shadow-md shadow-blue-100 active:scale-95" title="Añadir nuevo gasto">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+            </div>
+
+            <div id="contenedor-gastos-fijos" class="space-y-4">
+                <div id="sin-gastos" class="py-8 text-center border-2 border-dashed border-slate-100 rounded-xl">
+                    <p class="text-xs text-slate-400">No hay gastos fijos todavía.</p>
+                    <button id="btn-add-gasto-placeholder" class="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 hover:text-blue-700">
+                        <i class="fa-solid fa-plus"></i> Añade el primero
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center text-xs">
+                <span class="text-slate-500 font-medium">Total Gastos Fijos:</span>
+                <span id="txt-total-fijos" class="font-bold text-slate-800 text-sm">0,00 €</span>
+            </div>
+        </section>
+
+        <!-- 4. SECCIÓN: GASTOS CON TARJETA -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-rose-50 flex items-center justify-center text-rose-500">
+                    <i class="fa-solid fa-credit-card text-sm"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-slate-800 text-sm">Gastos con Tarjeta</h2>
+                    <p class="text-xs text-slate-400">Introduce tus compras diarias para sumarlas</p>
+                </div>
+            </div>
+
+            <!-- Mi Tarjeta -->
+            <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-3.5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-blue-500/10 text-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold">M</div>
+                        <span class="font-bold text-slate-700 text-xs">Mi Tarjeta</span>
+                    </div>
+                    <span id="txt-total-mi-tarjeta" class="font-extrabold text-slate-800 text-sm">0,00 €</span>
+                </div>
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">+</span>
+                        <input type="number" id="input-add-mi-tarjeta" placeholder="Importe..." step="0.01" min="0" class="block w-full pl-5 pr-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 focus:ring-1 focus:ring-blue-500 focus:outline-none">
+                    </div>
+                    <button id="btn-add-mi-tarjeta" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 active:scale-95 shadow-sm"><i class="fa-solid fa-plus"></i> Sumar</button>
+                </div>
+                <div class="flex justify-between items-center mt-2.5 pt-2 border-t border-slate-200/50 text-[10px]">
+                    <span id="historico-mi-tarjeta" class="text-slate-400 italic font-medium truncate max-w-[170px]">Sin gastos este mes</span>
+                    <button id="btn-clear-mi-tarjeta" class="text-slate-400 hover:text-red-500 font-semibold transition-colors"><i class="fa-solid fa-trash-can mr-0.5"></i> Limpiar</button>
+                </div>
+            </div>
+
+            <!-- Tarjeta de mi Mujer -->
+            <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-3.5">
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-rose-500/10 text-rose-600 rounded-full flex items-center justify-center text-[10px] font-bold">T</div>
+                        <span class="font-bold text-slate-700 text-xs">Tarjeta de mi Mujer</span>
+                    </div>
+                    <span id="txt-total-tarjeta-mujer" class="font-extrabold text-slate-800 text-sm">0,00 €</span>
+                </div>
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400 text-xs font-semibold">+</span>
+                        <input type="number" id="input-add-tarjeta-mujer" placeholder="Importe..." step="0.01" min="0" class="block w-full pl-5 pr-2 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-700 focus:ring-1 focus:ring-rose-500 focus:outline-none">
+                    </div>
+                    <button id="btn-add-tarjeta-mujer" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 active:scale-95 shadow-sm"><i class="fa-solid fa-plus"></i> Sumar</button>
+                </div>
+                <div class="flex justify-between items-center mt-2.5 pt-2 border-t border-slate-200/50 text-[10px]">
+                    <span id="historico-tarjeta-mujer" class="text-slate-400 italic font-medium truncate max-w-[170px]">Sin gastos este mes</span>
+                    <button id="btn-clear-tarjeta-mujer" class="text-slate-400 hover:text-red-500 font-semibold transition-colors"><i class="fa-solid fa-trash-can mr-0.5"></i> Limpiar</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER Y MODALES -->
+        <footer class="text-center mt-8 text-[10px] text-slate-400 space-y-1">
+            <p class="font-medium">PresuFácil v1.0.0 - Hecho para tu familia</p>
+            <p>Los datos se guardan de forma segura y privada en tu navegador.</p>
+        </footer>
+
+        <!-- MODAL GASTO FIJO -->
+        <div id="modal-gasto" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden opacity-0 transition-all duration-300">
+            <div class="bg-white rounded-2xl w-full max-w-xs overflow-hidden shadow-2xl border border-slate-100 transform scale-95 transition-all duration-300">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-receipt text-sm"></i>
+                        <h3 class="font-bold text-xs tracking-wide">Nuevo Gasto</h3>
+                    </div>
+                    <button id="btn-close-modal" class="text-white/85 hover:text-white transition-colors"><i class="fa-solid fa-xmark text-base"></i></button>
+                </div>
+                <form id="form-gasto" class="p-4 space-y-3.5">
+                    <div>
+                        <label for="modal-nombre" class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Nombre</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><i class="fa-solid fa-tag text-[10px]"></i></span>
+                            <input type="text" id="modal-nombre" placeholder="Ej. Luz, Agua, Coche..." required class="block w-full pl-7.5 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                        </div>
+                        <div class="mt-1.5 flex flex-wrap gap-1">
+                            <button type="button" class="sugerencia-gasto px-1.5 py-0.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 rounded text-[9px] font-semibold text-slate-500 transition-colors">Luz</button>
+                            <button type="button" class="sugerencia-gasto px-1.5 py-0.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 rounded text-[9px] font-semibold text-slate-500 transition-colors">Agua</button>
+                            <button type="button" class="sugerencia-gasto px-1.5 py-0.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 rounded text-[9px] font-semibold text-slate-500 transition-colors">Internet</button>
+                            <button type="button" class="sugerencia-gasto px-1.5 py-0.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 rounded text-[9px] font-semibold text-slate-500 transition-colors">Coche</button>
+                            <button type="button" class="sugerencia-gasto px-1.5 py-0.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-600 rounded text-[9px] font-semibold text-slate-500 transition-colors">Hipoteca</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="modal-monto" class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Importe Inicial (€)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 font-bold text-[10px]">€</span>
+                            <input type="number" id="modal-monto" placeholder="0.00" step="0.01" min="0" required class="block w-full pl-6 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="modal-max-rango" class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Rango Deslizador</label>
+                        <select id="modal-max-rango" class="block w-full bg-slate-50 border border-slate-200 rounded-xl py-1.5 px-2 text-[10px] text-slate-600 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                            <option value="100">Hasta 100 €</option>
+                            <option value="300" selected>Hasta 300 €</option>
+                            <option value="600">Hasta 600 €</option>
+                            <option value="1200">Hasta 1200 €</option>
+                            <option value="2000">Hasta 2000 €</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2 pt-2 text-xs">
+                        <button type="button" id="btn-cancelar-modal" class="flex-1 py-2 border border-slate-200 hover:bg-slate-50 rounded-xl font-semibold text-slate-500">Cancelar</button>
+                        <button type="submit" class="flex-1 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-md shadow-blue-100">Guardar Gasto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="app.js"></script>
+
+</body>
+</html>
