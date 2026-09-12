@@ -1,0 +1,134 @@
+/* Estilos adicionales personalizados para PresuFácil */
+
+/* Importar tipografía premium */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Ocultar flechas en inputs de tipo number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Transición suave para el color del balance */
+#card-balance {
+    transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Animaciones para el modal */
+.modal-active {
+    display: flex !important;
+}
+.modal-show {
+    opacity: 1 !important;
+}
+.modal-show > div {
+    transform: scale(1) !important;
+}
+
+/* Slider de rango personalizado para móviles (iOS y Android) */
+input[type=range] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    background: transparent;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+/* Barra del slider (Track) */
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: #e2e8f0; /* slate-200 */
+    border-radius: 9999px;
+    transition: background 0.2s;
+}
+
+input[type=range]:hover::-webkit-slider-runnable-track {
+    background: #cbd5e1; /* slate-300 */
+}
+
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+    background: #e2e8f0;
+    border-radius: 9999px;
+}
+
+/* Botón del slider (Thumb) */
+input[type=range]::-webkit-slider-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background: #3b82f6; /* blue-500 */
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -6px;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3), 0 4px 6px -4px rgba(59, 130, 246, 0.3);
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+input[type=range]:active::-webkit-slider-thumb {
+    transform: scale(1.2);
+    background: #2563eb; /* blue-600 */
+}
+
+input[type=range]::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border: none;
+    border-radius: 50%;
+    background: #3b82f6;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+    transition: transform 0.1s;
+}
+
+input[type=range]:active::-moz-range-thumb {
+    transform: scale(1.2);
+    background: #2563eb;
+}
+
+/* Animaciones de entrada de elementos */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.item-gasto {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Efectos visuales de alerta */
+.balance-negative {
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+    box-shadow: 0 20px 25px -5px rgba(239, 68, 68, 0.3), 0 8px 10px -6px rgba(239, 68, 68, 0.3) !important;
+}
+
+.balance-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    box-shadow: 0 20px 25px -5px rgba(245, 158, 11, 0.3), 0 8px 10px -6px rgba(245, 158, 11, 0.3) !important;
+}
